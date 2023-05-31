@@ -34,8 +34,8 @@ Users should be able to:
 - Flexbox
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- [msw](https://mswjs.io/) - Mock Service Worker for mocking the backend API
-- [swr](https://swr.vercel.app/) - Stale While Revalidate for fetching the data
+- [msw](https://mswjs.io/) - For mocking the backend API
+- [swr](https://swr.vercel.app/) - For fetching the data
 - [TailwindCSS](https://tailwindcss.com/) - For styles
 
 ## Author
