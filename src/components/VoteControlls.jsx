@@ -21,7 +21,7 @@ export default function VoteControlls({ score, upvote, downvote, votes = [] }) {
 
     return (
         <div className="bg-[#f5f6fa] rounded-md w-24 md:w-11 flex justify-between md:flex-col md:items-center md:gap-4 py-2 md:py-3 px-3 md:px-0">
-            <button onClick={upvote}>
+            <button onClick={upvote}  aria-label="upvote">
                 <svg
                     width="11"
                     height="11"
@@ -32,7 +32,7 @@ export default function VoteControlls({ score, upvote, downvote, votes = [] }) {
                 </svg>
             </button>
             <span className="text-[#5457b6] font-[500]">{score}</span>
-            <button onClick={downvote}>
+            <button onClick={downvote} aria-label="downvote">
                 <svg
                     width="11"
                     height="3"

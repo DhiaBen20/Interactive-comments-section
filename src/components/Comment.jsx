@@ -38,7 +38,7 @@ function Comment({ comment }) {
     }
 
     return (
-        <div>
+        <article>
             <Card>
                 <div className="md:flex md:gap-6 md:flex-row-reverse">
                     <div className="flex-1">
@@ -109,7 +109,7 @@ function Comment({ comment }) {
                     "Are you sure you want to delete this comment? this will remove comment and can't be undone"
                 }
             />
-        </div>
+        </article>
     );
 }
 
