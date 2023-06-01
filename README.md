@@ -25,8 +25,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [https://github.com/DhiaBen20/Interactive-comments-section](https://github.com/DhiaBen20/Interactive-comments-section)
+- Live Site URL: [https://dainty-torrone-0502c4.netlify.app/](https://dainty-torrone-0502c4.netlify.app/)
 
 ## Built with
 
@@ -34,8 +34,8 @@ Users should be able to:
 - Flexbox
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- [msw](https://mswjs.io/) - Mock Service Worker
-- [swr](https://swr.vercel.app/) - Stale While Revalidate
+- [msw](https://mswjs.io/) - For mocking the backend API
+- [swr](https://swr.vercel.app/) - For fetching the data
 - [TailwindCSS](https://tailwindcss.com/) - For styles
 
 ## Author
