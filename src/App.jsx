@@ -11,12 +11,10 @@ function App() {
     }
 
     return (
-        <>
-            <div className="mx-auto md:max-w-3xl py-10 px-4 md:px-0 space-y-6">
-                <CommentsList />
-                <AddComment />
-            </div>
-        </>
+        <main className="mx-auto md:max-w-3xl py-10 px-4 md:px-0 space-y-6">
+            <CommentsList />
+            <AddComment />
+        </main>
     );
 }
 
