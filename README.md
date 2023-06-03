@@ -32,7 +32,6 @@ Users should be able to:
 
 - Semantic HTML5 markup
 - Flexbox
-- Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
 - [msw](https://mswjs.io/) - For mocking the backend API
 - [swr](https://swr.vercel.app/) - For fetching the data
