@@ -1,11 +1,15 @@
 import { useState } from "react";
+
 import {
     useAddReplyMutation,
     useDeleteReplyMutation,
     useEditReplyMutation,
-    useReplyVotesMutation,
-    useUser,
-} from "../hooks";
+    useReplyDownVoteMutation,
+    useReplyUpVoteMutation,
+} from "../data-fetching";
+import useUser from "../data-fetching/hooks/useUser";
+import type { Reply as ReplyType } from "../types";
+import AddReply from "./AddReply";
 import Card from "./Card";
 import CommentForm from "./CommentForm";
 import CommentHeader from "./CommentHeader";
@@ -14,28 +18,45 @@ import EditButton from "./EditButton";
 import Modal from "./Modal";
 import ReplyButton from "./ReplyButton";
 import VoteControlls from "./VoteControlls";
-import AddReply from "./AddReply";
 
-export default function Reply({ reply, commentId }) {
-    let [isReplying, setIsReplying] = useState(false);
-    let [isEditing, setIsEditing] = useState(false);
-    let [isOpen, setIsOpen] = useState(false);
+export default function Reply({
+    reply,
+    commentId,
+}: {
+    reply: ReplyType;
+    commentId: ReplyType["id"];
+}) {
+    const [isReplying, setIsReplying] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-    let { editReply } = useEditReplyMutation(commentId, reply.id);
-    let { deleteReply } = useDeleteReplyMutation(commentId, reply.id);
-    let { upvote, downvote } = useReplyVotesMutation(commentId, reply.id);
-    let { addReply } = useAddReplyMutation(commentId);
+    const editReply = useEditReplyMutation(() => setIsEditing(false));
+    const deleteReply = useDeleteReplyMutation();
+    const upvote = useReplyUpVoteMutation();
+    const downvote = useReplyDownVoteMutation();
+    const { trigger: addReply } = useAddReplyMutation(() =>
+        setIsReplying(false)
+    );
 
-    let { data: currentUser } = useUser();
+    const { username } = useUser().data!;
 
-    let isOwnedByCurrentUser = currentUser.username == reply.user.username;
+    const isOwnedByCurrentUser = username == reply.user.username;
 
-    function handleAddReply(content) {
-        addReply({ content, replyingTo: reply.user.username }, setIsReplying);
+    function handleAddReply(content: string) {
+        addReply({
+            commentId,
+            body: { content, replyingTo: reply.user.username },
+        });
     }
 
-    function handleEditReply(content) {
-        editReply(content, setIsEditing);
+    function handleEditReply(content: string) {
+        editReply({
+            commentId,
+            replyId: reply.id,
+            body: {
+                content,
+            },
+        });
     }
 
     return (
@@ -72,8 +93,20 @@ export default function Reply({ reply, commentId }) {
                         <VoteControlls
                             score={reply.score}
                             votes={reply.votes}
-                            upvote={upvote}
-                            downvote={downvote}
+                            upvote={() =>
+                                upvote({
+                                    commentId,
+                                    replyId: reply.id,
+                                    username,
+                                })
+                            }
+                            downvote={() =>
+                                downvote({
+                                    commentId,
+                                    replyId: reply.id,
+                                    username,
+                                })
+                            }
                         />
 
                         <div className="md:hidden space-x-6">
@@ -107,7 +140,7 @@ export default function Reply({ reply, commentId }) {
             <Modal
                 isOpen={isOpen}
                 close={() => setIsOpen(false)}
-                confirm={() => deleteReply(setIsOpen)}
+                confirm={() => deleteReply({ commentId, replyId: reply.id })}
                 header={"Delete Reply"}
                 message={
                     "Are you sure you want to delete this Reply? this will remove Reply and can't be undone"

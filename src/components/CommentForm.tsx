@@ -1,40 +1,63 @@
-import { useState } from "react";
-import { useUser } from "../hooks";
+import { FormEvent } from "react";
+import useUser from "../data-fetching/hooks/useUser";
 import Button from "./Button";
-import Textarea from "./Textarea";
 import Card from "./Card";
+import Textarea from "./Textarea";
 
 function Avatar() {
-    let userResponse = useUser();
+    const user = useUser().data!;
 
     return (
         <img
-            src={userResponse.data?.image?.png}
+            src={user.image.png}
             alt="Avatar of the comment owner"
             className="w-full leading-[0]"
         />
     );
 }
 
-function CommentForm({ onSubmit, replyingTo = "", prevContent = "" }) {
-    let [loading, setLoading] = useState(false);
+type CommentFormSubmit = {
+    (content: string, reset: () => void): void;
+};
 
+type CommentFormProps = {
+    isSubmitting?: boolean;
+    replyingTo?: string;
+    prevContent?: string;
+
+    onSubmit: CommentFormSubmit;
+};
+
+// This component serves multiple purposes: creating a new comment,
+// replying to an existing comment, editing a comment, or editing a reply.
+// The UI of the component varies based on the combination of
+// the `prevContent` and `replyingTo` props, rather than a direct prop.
+// If `prevContent` is passed, it indicates that the component is being used to edit a comment or a reply.
+// If `replyingTo` is passed, it indicates that the component is being used to create a reply.
+
+function CommentForm({
+    isSubmitting,
+    replyingTo = "",
+    prevContent = "",
+    onSubmit,
+}: CommentFormProps) {
     replyingTo = replyingTo && `@${replyingTo} `;
-    let defaultValue = `${replyingTo}${prevContent}`;
 
-    function handleSubmit(e) {
+    function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        setLoading(true);
 
-        let textarea = e.target.comment;
+        if (e.target instanceof HTMLFormElement) {
+            const textarea = e.target.comment;
 
-        onSubmit(textarea.value.replace(replyingTo, "").trim(), () => {
-            textarea.value = "";
-            setLoading(false);
-        });
+            if (!textarea || !(textarea instanceof HTMLTextAreaElement)) return;
+
+            onSubmit(textarea.value.replace(replyingTo, "").trim(), () => {
+                textarea.value = "";
+            });
+        }
     }
 
-    let formStyles = `md:flex md:gap-4 ${
+    const formStyles = `md:flex md:gap-4 ${
         prevContent ? "mt-4 flex-col" : "md:items-start md:justify-between "
     }`;
 
@@ -52,7 +75,7 @@ function CommentForm({ onSubmit, replyingTo = "", prevContent = "" }) {
                         <Textarea
                             name="comment"
                             placeholder="Add a comment..."
-                            defaultValue={defaultValue}
+                            defaultValue={`${replyingTo}${prevContent}`}
                         />
                     </div>
 
@@ -67,7 +90,7 @@ function CommentForm({ onSubmit, replyingTo = "", prevContent = "" }) {
                             </div>
                         )}
 
-                        <Button loading={loading}>
+                        <Button loading={isSubmitting}>
                             {prevContent
                                 ? "Update"
                                 : replyingTo

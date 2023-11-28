@@ -1,11 +1,18 @@
 import Reply from "./Reply";
+import type { Reply as ReplyType } from "../types";
 
-function RepliesList({ replies = [], commentId }) {
+function RepliesList({
+    replies = [],
+    commentId,
+}: {
+    replies: ReplyType[];
+    commentId: ReplyType["id"];
+}) {
     if (!replies.length) {
         return null;
     }
 
-    let sortedReplies = [...replies].sort((a, b) => a.createdAt - b.createdAt);
+    const sortedReplies = [...replies].sort((a, b) => a.createdAt - b.createdAt);
 
     return (
         <div className="pl-4 md:pl-8 md:ml-8 border-l-2 border-[#eaecf1] space-y-6">

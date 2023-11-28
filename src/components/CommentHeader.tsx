@@ -1,7 +1,17 @@
 import { relativeDate } from "../helpers";
-import ReplyButton from "./ReplyButton";
-import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import EditButton from "./EditButton";
+import ReplyButton from "./ReplyButton";
+
+type CommentHeaderProps = {
+    avatarURL: string;
+    username: string;
+    createdAt: number;
+    isOwnedByCurrentUser: boolean;
+    onReplyClick: () => void;
+    onEditClick: () => void;
+    onDeleteClick: () => void;
+};
 
 export default function CommentHeader({
     avatarURL,
@@ -11,7 +21,7 @@ export default function CommentHeader({
     onReplyClick,
     onEditClick,
     onDeleteClick,
-}) {
+}: CommentHeaderProps) {
     return (
         <div className="md:flex md:justify-between md:items-center">
             <div className="flex items-center space-x-4">

@@ -1,4 +1,9 @@
-export default function Textarea({ rows = 3, ...props }) {
+import { ComponentPropsWithoutRef } from "react";
+
+export default function Textarea({
+    rows = 3,
+    ...props
+}: { rows?: number } & ComponentPropsWithoutRef<"textarea">) {
     return (
         <textarea
             {...props}

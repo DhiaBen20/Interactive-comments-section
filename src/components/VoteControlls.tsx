@@ -1,19 +1,32 @@
-import { useUser } from "../hooks";
+import useUser from "../data-fetching/hooks/useUser";
+import { Vote } from "../types";
 
-export default function VoteControlls({ score, upvote, downvote, votes = [] }) {
-    let { data: currentUser } = useUser();
+type VoteControllsProps = {
+    score: number;
+    upvote: () => void;
+    downvote: () => void;
+    votes?: Vote[];
+};
 
-    let currentUserVote = votes.find(
+export default function VoteControlls({
+    score,
+    upvote,
+    downvote,
+    votes = [],
+}: VoteControllsProps) {
+    const currentUser = useUser().data!;
+
+    const currentUserVote = votes.find(
         (vote) => vote.username == currentUser.username
     );
 
-    let plusIconClassess = `hover:fill-[#5457b6] ${
+    const plusIconClassess = `hover:fill-[#5457b6] ${
         currentUserVote && currentUserVote.type == "upvote"
             ? "fill-[#5457b6]"
             : "fill-[#C5C6EF]"
     }`;
 
-    let minusIconClassess = `hover:fill-[#5457b6] ${
+    const minusIconClassess = `hover:fill-[#5457b6] ${
         currentUserVote && currentUserVote.type == "downvote"
             ? "fill-[#5457b6]"
             : "fill-[#C5C6EF]"
@@ -21,7 +34,7 @@ export default function VoteControlls({ score, upvote, downvote, votes = [] }) {
 
     return (
         <div className="bg-[#f5f6fa] rounded-md w-24 md:w-11 flex justify-between md:flex-col md:items-center md:gap-4 py-2 md:py-3 px-3 md:px-0">
-            <button onClick={upvote}  aria-label="upvote">
+            <button onClick={upvote} aria-label="upvote">
                 <svg
                     width="11"
                     height="11"
